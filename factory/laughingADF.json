@@ -1,0 +1,9 @@
+{
+	"name": "laughingADF",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "1b611d56-a462-4fd1-9ced-7e6a7978f0a4",
+		"tenantId": "f5bb4fdc-c1cf-4af6-a889-026572d67975"
+	}
+}

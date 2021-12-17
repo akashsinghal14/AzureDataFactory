@@ -56,7 +56,7 @@
 										"referenceName": "AzureBlobStorageLinkedService",
 										"type": "LinkedServiceReference"
 									},
-									"path": "adfstagedpolybasetempdata"
+									"path": ""
 								}
 							},
 							"inputs": [

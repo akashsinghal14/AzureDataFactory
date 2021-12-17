@@ -7,24 +7,10 @@
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
-		"schema": [
-			{
-				"name": "ID",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "FirstName",
-				"type": "varchar"
-			},
-			{
-				"name": "LastName",
-				"type": "varchar"
-			}
-		],
+		"schema": [],
 		"typeProperties": {
-			"schema": "SalesLT",
-			"table": "Address"
+			"schema": "dbo",
+			"table": "dummyName"
 		}
 	}
 }

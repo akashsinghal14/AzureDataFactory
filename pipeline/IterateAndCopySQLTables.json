@@ -47,21 +47,20 @@
 										"rejectType": "value",
 										"useTypeDefault": false
 									},
-									"tableOption": "autoCreate",
 									"disableMetricsCollection": false
 								},
 								"enableStaging": true,
 								"stagingSettings": {
 									"linkedServiceName": {
-										"referenceName": "AzureBlobStorageLinkedService",
+										"referenceName": "AzureBlobStorage1",
 										"type": "LinkedServiceReference"
 									},
-									"path": "adfstagedpolybasetempdata"
+									"path": ""
 								}
 							},
 							"inputs": [
 								{
-									"referenceName": "AzureSqlTable1",
+									"referenceName": "AzureSqlDatabaseDataset",
 									"type": "DatasetReference"
 								}
 							],

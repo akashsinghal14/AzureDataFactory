@@ -5,6 +5,9 @@
 		"factoryName": {
 			"value": "laughingADF"
 		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
 		"AzureBlobStorageLinkedService_connectionString": {
 			"value": ""
 		},

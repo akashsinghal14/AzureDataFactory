@@ -83,6 +83,21 @@
 						}
 					]
 				}
+			},
+			{
+				"name": "TriggerCopy",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"waitOnCompletion": false,
+					"parameters": {
+						"tableList": {
+							"value": "@activity('LookupTableList').output.value",
+							"type": "Expression"
+						}
+					}
+				}
 			}
 		],
 		"parameters": {

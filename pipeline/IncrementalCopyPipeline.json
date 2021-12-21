@@ -114,7 +114,13 @@
 				"outputs": [
 					{
 						"referenceName": "AzureStorageLinkedService",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"FileName": {
+								"value": "@CONCAT('Incremental-', pipeline().RunId, '.txt')",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			},

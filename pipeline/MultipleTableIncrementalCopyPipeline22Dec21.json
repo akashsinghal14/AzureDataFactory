@@ -68,7 +68,20 @@
 						{
 							"name": "IncrementalCopyActivity",
 							"type": "Copy",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "LookupOldWaterMarkActivity",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								},
+								{
+									"activity": "LookupNewWaterMarkActivity",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
 							"policy": {
 								"timeout": "7.00:00:00",
 								"retry": 0,
@@ -79,24 +92,20 @@
 							"userProperties": [],
 							"typeProperties": {
 								"source": {
-									"type": "AzureSqlSource",
-									"sqlReaderQuery": {
-										"value": "select * from data_source_table where LastModifytime > '@{activity('LookupOldWaterMarkActivity').output.firstRow.WatermarkValue}' and LastModifytime <= '@{activity('LookupNewWaterMarkActivity').output.firstRow.NewWatermarkvalue}'",
-										"type": "Expression"
-									},
+									"type": "SqlServerSource",
+									"sqlReaderQuery": "select * from @{item().TABLE_NAME} where @{item().WaterMark_Column} > '@{activity('LookupOldWaterMarkActivity').output.firstRow.WatermarkValue}' and @{item().WaterMark_Column} <= '@{activity('LookupNewWaterMarkActivity').output.firstRow.NewWatermarkvalue}'",
 									"queryTimeout": "02:00:00",
 									"partitionOption": "None"
 								},
 								"sink": {
-									"type": "DelimitedTextSink",
-									"storeSettings": {
-										"type": "AzureBlobStorageWriteSettings"
+									"type": "AzureSqlSink",
+									"sqlWriterStoredProcedureName": {
+										"value": "@item().StoredProcedureNameForMergeOperation",
+										"type": "Expression"
 									},
-									"formatSettings": {
-										"type": "DelimitedTextWriteSettings",
-										"quoteAllText": true,
-										"fileExtension": ".txt"
-									}
+									"sqlWriterTableType": "@{item().TableType}",
+									"storedProcedureTableTypeParameterName": "@{item().TABLE_NAME}",
+									"disableMetricsCollection": false
 								},
 								"enableStaging": false,
 								"translator": {
@@ -110,21 +119,31 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "SourceDataset",
+									"referenceName": "SqlServerTablefromHostMachine22Dec21",
 									"type": "DatasetReference"
 								}
 							],
 							"outputs": [
 								{
-									"referenceName": "AzureStorageLinkedService",
-									"type": "DatasetReference"
+									"referenceName": "AzureSqlTable22Dec21",
+									"type": "DatasetReference",
+									"parameters": {
+										"SinkTableName": "@{item().TABLE_NAME}"
+									}
 								}
 							]
 						},
 						{
 							"name": "StoredProceduretoWriteWatermarkActivity",
 							"type": "SqlServerStoredProcedure",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "IncrementalCopyActivity",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
 							"policy": {
 								"timeout": "7.00:00:00",
 								"retry": 0,

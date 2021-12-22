@@ -1,0 +1,14 @@
+{
+	"name": "SqlServerTablefromHostMachine22Dec21",
+	"properties": {
+		"description": "Creating this for MultipleTableIncrementalCopyPipeline22Dec21",
+		"linkedServiceName": {
+			"referenceName": "SqlServerSelfHostedLinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

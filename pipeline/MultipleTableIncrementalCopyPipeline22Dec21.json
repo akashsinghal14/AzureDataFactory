@@ -1,0 +1,190 @@
+{
+	"name": "MultipleTableIncrementalCopyPipeline22Dec21",
+	"properties": {
+		"description": "Following this tutorial on https://docs.microsoft.com/en-in/azure/data-factory/tutorial-incremental-copy-multiple-tables-portal\ntoday on 22 December 2021",
+		"activities": [
+			{
+				"name": "IterateSQLTables",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.tableList",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "LookupOldWaterMarkActivity",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": "select * from watermarktable where TableName  =  '@{item().TABLE_NAME}'",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "WatermarkDataset22Dec21",
+									"type": "DatasetReference"
+								}
+							}
+						},
+						{
+							"name": "LookupNewWaterMarkActivity",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": "select MAX(@{item().WaterMark_Column}) as NewWatermarkvalue from @{item().TABLE_NAME}",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "SqlServerTablefromHostMachine22Dec21",
+									"type": "DatasetReference"
+								},
+								"firstRowOnly": true
+							}
+						},
+						{
+							"name": "IncrementalCopyActivity",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "LookupOldWaterMarkActivity",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								},
+								{
+									"activity": "LookupNewWaterMarkActivity",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": "select * from @{item().TABLE_NAME} where @{item().WaterMark_Column} > '@{activity('LookupOldWaterMarkActivity').output.firstRow.WatermarkValue}' and @{item().WaterMark_Column} <= '@{activity('LookupNewWaterMarkActivity').output.firstRow.NewWatermarkvalue}'",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "AzureSqlSink",
+									"sqlWriterStoredProcedureName": {
+										"value": "@item().StoredProcedureNameForMergeOperation",
+										"type": "Expression"
+									},
+									"sqlWriterTableType": "@{item().TableType}",
+									"storedProcedureTableTypeParameterName": "@{item().TABLE_NAME}",
+									"disableMetricsCollection": false
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "SqlServerTablefromHostMachine22Dec21",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "AzureSqlTable22Dec21",
+									"type": "DatasetReference",
+									"parameters": {
+										"SinkTableName": "@{item().TABLE_NAME}"
+									}
+								}
+							]
+						},
+						{
+							"name": "StoredProceduretoWriteWatermarkActivity",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [
+								{
+									"activity": "IncrementalCopyActivity",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[dbo].[usp_write_watermark]",
+								"storedProcedureParameters": {
+									"LastModifiedtime": {
+										"value": {
+											"value": "@{activity('LookupNewWaterMarkActivity').output.firstRow.NewWatermarkvalue}",
+											"type": "Expression"
+										},
+										"type": "DateTime"
+									},
+									"TableName": {
+										"value": {
+											"value": "@{activity('LookupOldWaterMarkActivity').output.firstRow.TableName}",
+											"type": "Expression"
+										},
+										"type": "String"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "AzureSqlDatabase1",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"tableList": {
+				"type": "array"
+			}
+		},
+		"annotations": []
+	}
+}

@@ -1,0 +1,25 @@
+{
+	"name": "AzureSqlTable22Dec21",
+	"properties": {
+		"description": "Creating this data set for MultipleTableIncrementalCopyPipeline22Dec21",
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"SinkTableName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"table": {
+				"value": "@dataset().SinkTableName",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,27 @@
+{
+	"name": "WatermarkDataset22Dec21",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SqlServerSelfHostedLinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "TableName",
+				"type": "varchar"
+			},
+			{
+				"name": "WatermarkValue",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "watermarktable"
+		}
+	}
+}

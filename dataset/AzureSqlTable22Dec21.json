@@ -13,7 +13,13 @@
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
-		"schema": []
+		"schema": [],
+		"typeProperties": {
+			"table": {
+				"value": "@dataset().SinkTableName",
+				"type": "Expression"
+			}
+		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }

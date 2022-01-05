@@ -1037,11 +1037,11 @@
 							"storedProcedureName": "[[dbo].[Update_ChangeTracking_Version]",
 							"storedProcedureParameters": {
 								"CurrentTrackingVersion": {
-									"value": "@{activity('LookupCurrentChangeTrackingVersionActivity').output.firstRow.CurrentChangeTrackingVersion}",
+									"value": "@{activity('LookupCurrentChangeTrackingVersionActivity5Jan22').output.firstRow.CurrentChangeTrackingVersion}",
 									"type": "Int64"
 								},
 								"TableName": {
-									"value": "@{activity('LookupLastChangeTrackingVersionActivity').output.firstRow.TableName}",
+									"value": "@{activity('LookupLastChangeTrackingVersionActivity5Jan22').output.firstRow.TableName}",
 									"type": "String"
 								}
 							}

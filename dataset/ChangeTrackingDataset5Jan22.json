@@ -1,0 +1,16 @@
+{
+	"name": "ChangeTrackingDataset5Jan22",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "table_store_ChangeTracking_version"
+		}
+	}
+}

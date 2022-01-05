@@ -974,7 +974,7 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select data_source_table.PersonID,data_source_table.Name,data_source_table.Age, CT.SYS_CHANGE_VERSION, SYS_CHANGE_OPERATION from data_source_table RIGHT OUTER JOIN CHANGETABLE(CHANGES data_source_table, @{activity('LookupLastChangeTrackingVersionActivity').output.firstRow.SYS_CHANGE_VERSION}) as CT on data_source_table.PersonID = CT.PersonID where CT.SYS_CHANGE_VERSION <= @{activity('LookupCurrentChangeTrackingVersionActivity').output.firstRow.CurrentChangeTrackingVersion}",
+								"sqlReaderQuery": "select data_source_table2.PersonID,data_source_table2.Name,data_source_table2.Age, CT.SYS_CHANGE_VERSION, SYS_CHANGE_OPERATION \nfrom data_source_table2 RIGHT OUTER JOIN CHANGETABLE(CHANGES data_source_table2, @{activity('LookupLastChangeTrackingVersionActivity').output.firstRow.SYS_CHANGE_VERSION}) as CT \non data_source_table2.PersonID = CT.PersonID \nwhere CT.SYS_CHANGE_VERSION <= @{activity('LookupCurrentChangeTrackingVersionActivity').output.firstRow.CurrentChangeTrackingVersion}",
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},

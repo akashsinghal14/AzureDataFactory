@@ -79,7 +79,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "select data_source_table.PersonID,data_source_table.Name,data_source_table.Age, CT.SYS_CHANGE_VERSION, SYS_CHANGE_OPERATION \nfrom data_source_table RIGHT OUTER JOIN CHANGETABLE(CHANGES data_source_table, @{activity('LookupLastChangeTrackingVersionActivity5Jan22').output.firstRow.SYS_CHANGE_VERSION}) as CT \non data_source_table.PersonID = CT.PersonID \nwhere CT.SYS_CHANGE_VERSION <= @{activity('LookupCurrentChangeTrackingVersionActivity5Jan2022').output.firstRow.CurrentChangeTrackingVersion}",
+						"sqlReaderQuery": "select data_source_table.PersonID,data_source_table.Name,data_source_table.Age, CT.SYS_CHANGE_VERSION, SYS_CHANGE_OPERATION \nfrom data_source_table RIGHT OUTER JOIN CHANGETABLE(CHANGES data_source_table, @{activity('LookupLastChangeTrackingVersionActivity5Jan22').output.firstRow.SYS_CHANGE_VERSION}) as CT \non data_source_table.PersonID = CT.PersonID \nwhere CT.SYS_CHANGE_VERSION <= @{activity('LookupCurrentChangeTrackingVersionActivity5Jan22').output.firstRow.CurrentChangeTrackingVersion}",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},

@@ -921,7 +921,7 @@
 						}
 					},
 					{
-						"name": "LookupCurrentChangeTrackingVersionActivity5",
+						"name": "LookupCurrentChangeTrackingVersionActivity",
 						"type": "Lookup",
 						"dependsOn": [],
 						"policy": {
@@ -957,7 +957,7 @@
 								]
 							},
 							{
-								"activity": "LookupCurrentChangeTrackingVersionActivity5",
+								"activity": "LookupCurrentChangeTrackingVersionActivity",
 								"dependencyConditions": [
 									"Succeeded"
 								]
